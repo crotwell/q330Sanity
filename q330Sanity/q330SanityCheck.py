@@ -131,7 +131,6 @@ def main():
     VERBOSE = False
     sisNamespace = "TESTING"
     parseArgs = initArgParser()
-    print("in main")
     if parseArgs.verbose:
         VERBOSE=True
         for k, v in vars(parseArgs).iteritems():
