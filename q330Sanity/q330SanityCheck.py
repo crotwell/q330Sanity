@@ -116,8 +116,11 @@ def printResult(result):
         loc = lcq.find("loc").text
         seedChan = lcq.find("seed").text
         print('{}:  tokens{}: {!s} {!s}.{!s} {}'.format(result['testname'], result['tokenNum'], result['ok'], loc, seedChan, result['msg']))
-    else:
+    elif 'token' in result:
         print('{}:  tokens{}: {!s} {!s}'.format(result['testname'], result['tokenNum'], result['ok'], result['msg']))
+    else:
+        print('{}:  {!s} {!s}'.format(result['testname'], result['ok'], result['msg']))
+
 
 def parseQ330Config(filename):
     print("Loading: "+filename)
