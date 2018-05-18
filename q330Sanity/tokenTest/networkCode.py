@@ -1,13 +1,13 @@
 import util
 
+testname = util.getTestName(__file__)
+
 networkCode = '"CO"'
 
 def test(tokenNum, tokens):
-    result = {}
-    result['testname'] = util.getTestName(__file__)
+    result = util.createEmptyTestResult(testname)
     result['tokens'] = tokens
     result['tokenNum'] = tokenNum
-    result['ok'] = True
     tokenNet = tokens.find("network").text
     if (tokenNet != networkCode):
         result['ok'] = False

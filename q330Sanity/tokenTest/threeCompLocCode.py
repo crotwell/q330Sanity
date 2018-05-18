@@ -1,9 +1,10 @@
 import util
 
+testname = util.getTestName(__file__)
+
 def test(tokenNum, token):
     resultList = []
-    result = {}
-    result['testname'] = util.getTestName(__file__)
+    result = util.createEmptyTestResult(testname)
     result['token'] = token
     result['tokenNum'] = tokenNum
     allChans = util.organizeLcqList(token)
@@ -22,13 +23,12 @@ def test(tokenNum, token):
         for lcqOb in byLoggerBoard[board]:
             allLocCodes.add(lcqOb['locCode'])
         if len(allLocCodes) > 1:
-            resultList.append({
-                'token': result['token'],
-                'tokenNum': result['tokenNum'],
-                'testname': result['testname'],
-                'msg': "Expected one loc code for board {} but found {}: {}".format(board, len(allLocCodes), allLocCodes),
-                'ok': False
-            })
+            r = util.createEmptyTestResult(testname)
+            r['token'] = token
+            r['tokenNum'] = tokenNum
+            r['msg'] = "Expected one loc code for board {} but found {}: {}".format(board, len(allLocCodes), allLocCodes)
+            r['ok'] = False
+            resultList.append(r)
     if len(resultList) == 0:
         result['ok'] = True
     else:

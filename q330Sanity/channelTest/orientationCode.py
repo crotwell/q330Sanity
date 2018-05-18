@@ -1,9 +1,10 @@
 import numbers
 import util
 
+testname = util.getTestName(__file__)
+
 def test(tokenNum, lcq):
-    result = {}
-    result['testname'] = util.getTestName(__file__)
+    result = util.createEmptyTestResult(testname)
     result['lcq'] = lcq
     result['tokenNum'] = tokenNum
     channelNum = util.getChanBinaryValue(lcq.find("chan").text)

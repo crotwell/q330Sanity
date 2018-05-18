@@ -1,5 +1,12 @@
 import os
 
+def createEmptyTestResult(testname):
+    return {
+        'testname': testname,
+        'ok': True,
+        'msg': 'ok'
+    }
+
 def getTestName(file):
     return os.path.basename(file)
 

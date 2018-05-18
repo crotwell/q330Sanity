@@ -40,9 +40,6 @@ def usage():
 def initArgParser():
   parser = argparse.ArgumentParser(description='Sanity checks on Q330 XML config file.')
   parser.add_argument('-q', '--q330', required=True, help="input Q330 config file, often from Willard.")
-  parser.add_argument('--nrl', default='nrl', help="replace matching responses with links to NRL")
-  parser.add_argument('--namespace', default='Testing', help="SIS namespace to use for named responses, see http://anss-sis.scsn.org/sis/master/namespace/")
-  parser.add_argument('--operator', default='Testing', help="SIS operator to use for stations, see http://anss-sis.scsn.org/sis/master/org/")
   parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('w'), default=sys.stdout)
   parser.add_argument('-v', '--verbose', action='store_true', help="verbose output")
   return parser.parse_args()
@@ -72,18 +69,20 @@ def runSanity(root):
     out.append(tokenSanity(4, tokens4))
     return out
 
-def printSanity(resultList):
-    print('----------- Sanity Tests -----------')
-    printSanityRecursive(resultList)
-    print()
+def printSanity(outfile, resultList):
+    outfile.write('----------- Sanity Tests -----------\n')
+    if VERBOSE:
+        outfile.write("   - Verbose output {}\n".format(VERBOSE))
+    printSanityRecursive(outfile, resultList)
+    outfile.write('\n')
 
-def printSanityRecursive(resultList):
+def printSanityRecursive(outfile, resultList):
     for result in resultList:
         if isinstance(result, list):
-            printSanityRecursive(result)
+            printSanityRecursive(outfile, result)
         else:
-            if not result['ok']:
-                printResult(result)
+            if VERBOSE or not result['ok']:
+                printResult(outfile, result)
 
 def globalSanity(root):
     out = []
@@ -110,37 +109,34 @@ def lcqSanity(tokenNum, lcq):
         out.append(result)
     return out
 
-def printResult(result):
+def printResult(outfile, result):
     if ('lcq' in result):
         lcq = result['lcq']
         loc = lcq.find("loc").text
         seedChan = lcq.find("seed").text
-        print('{}:  tokens{}: {!s} {!s}.{!s} {}'.format(result['testname'], result['tokenNum'], result['ok'], loc, seedChan, result['msg']))
+        outfile.write('{}:  tokens{}: {!s} {!s}.{!s} {}\n'.format(result['testname'], result['tokenNum'], result['ok'], loc, seedChan, result['msg']))
     elif 'token' in result:
-        print('{}:  tokens{}: {!s} {!s}'.format(result['testname'], result['tokenNum'], result['ok'], result['msg']))
+        outfile.write('{}:  tokens{}: {!s} {!s}\n'.format(result['testname'], result['tokenNum'], result['ok'], result['msg']))
     else:
-        print('{}:  {!s} {!s}'.format(result['testname'], result['ok'], result['msg']))
+        outfile.write('{}:  {!s} {!s}\n'.format(result['testname'], result['ok'], result['msg']))
 
 
-def parseQ330Config(filename):
+def parseQ330Config(outfile, filename):
     print("Loading: "+filename)
     tree = etree.parse(filename)
     sanityResultList = runSanity(tree.getroot())
-    printSanity(sanityResultList)
-    print()
-    sisInstallInfo.printInstructions(tree, filename)
+    printSanity(outfile, sanityResultList)
+    outfile.write('\n')
+    sisInstallInfo.printInstructions(outfile, tree, filename)
 
 def main():
-    VERBOSE = False
-    sisNamespace = "TESTING"
     parseArgs = initArgParser()
+    print("parseArgs.verbose: {}".format(parseArgs.verbose))
+    global VERBOSE
     if parseArgs.verbose:
         VERBOSE=True
-        for k, v in vars(parseArgs).iteritems():
-            print("    Args: %s %s"%(k, v))
-    sisNamespace = parseArgs.namespace
     if parseArgs.q330:
         if not os.path.exists(parseArgs.q330):
             print("ERROR: can't fine q330 xml file %s"%(parseArgs.q330,))
             return
-        parseQ330Config(parseArgs.q330)
+        parseQ330Config(parseArgs.outfile, parseArgs.q330)
