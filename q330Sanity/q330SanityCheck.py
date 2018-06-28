@@ -73,16 +73,20 @@ def printSanity(outfile, resultList):
     outfile.write('----------- Sanity Tests -----------\n')
     if VERBOSE:
         outfile.write("   - Verbose output {}\n".format(VERBOSE))
-    printSanityRecursive(outfile, resultList)
+    allOk = printSanityRecursive(outfile, resultList)
+    if allOk:
+        outfile.write('All OK\n')
     outfile.write('\n')
 
-def printSanityRecursive(outfile, resultList):
+def printSanityRecursive(outfile, resultList, allOk=True):
     for result in resultList:
         if isinstance(result, list):
-            printSanityRecursive(outfile, result)
+            allOk = allOk and printSanityRecursive(outfile, result, allOk)
         else:
             if VERBOSE or not result['ok']:
+                allOk = False
                 printResult(outfile, result)
+    return allOk
 
 def globalSanity(root):
     out = []

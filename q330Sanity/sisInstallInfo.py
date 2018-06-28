@@ -7,8 +7,10 @@ import util
 def printInstructions(outfile, q330, filename):
     outfile.write('----------- SIS Logger Configuration ({})-----------\n'.format(filename))
     updated = arrow.get(q330.find("writer").find("updated").text, 'DD MMM YYYY HH:mm:ss ZZZ')
-    outfile.write("Install time: {}\n".format(updated.format('YYYY-MM-DD HH:mm:ss ZZ')))
+    outfile.write("  Install time: {}\n".format(updated.format('YYYY-MM-DD HH:mm:ss ZZ')))
     tokens1 = q330.find("tokens1")
+    outfile.write("  Tokens 1\n");
+    outfile.write("  Dip and Azimuth are only guesses based on channel code\n");
     allChans = util.organizeLcqList(tokens1)
 
     outfile.write('\n')
