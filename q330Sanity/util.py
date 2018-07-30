@@ -17,6 +17,7 @@ chanBinaryMap["11100010"] = 3
 chanBinaryMap["11100011"] = 4
 chanBinaryMap["11100100"] = 5
 chanBinaryMap["11100101"] = 6
+chanBinaryMap["10100000"] = "MP"
 chanBinaryMap["10100001"] = "MP"
 
 def getChanBinaryValue(s):
@@ -93,11 +94,11 @@ def dipFromChanCode(chan):
     elif chan[-1] == 'E' or chan[-1] == '2':
         return 0
     elif chan[-1] == 'U':
-        return -54.7
+        return -35.3
     elif chan[-1] == 'V':
-        return -54.7
+        return -35.3
     elif chan[-1] == 'W':
-        return -54.7
+        return -35.3
     else:
         return 'dip?'
 
@@ -115,6 +116,7 @@ componentNameMap = {
 'LCO': { 'component':'CALIBRATIONINPUT', 'type':'Calibration Input', 'gain':0 , 'units':''		 },
 'LCQ': { 'component':'CLOCKQUALITY', 'type':'Clock Quality', 'gain':1, 'units':'count/%' },
 'LOG': { 'component':'LOG', 'type':'LOG', 'gain':0 , 'units':'' },
+'LTW': { 'component':'STATUSBYTE', 'type':'Status Byte', 'gain':0 , 'units':'' },
 'OCF': { 'component':'OCF', 'type':'OCF', 'gain':0 , 'units':''},
 'VCE': { 'component':'CLOCKPHASE', 'type':'Clock Phase', 'gain':1000000, 'units':'count/s' },
 'VCO': { 'component':'VOLTAGECONTROLLEDOSCILLATOR', 'type':'Voltage Controlled Oscillator', 'gain':1, 'units':'count/number' },
@@ -123,5 +125,6 @@ componentNameMap = {
 'VEC': { 'component':'SYSTEMCURRENT', 'type':'System Current', 'gain':1000, 'units':'count/A' },
 'VEP': { 'component':'SYSTEMVOLTAGE', 'type':'System Voltage', 'gain':6.667, 'units':'count/V' },
 'VFP': { 'component':'PACKETBUFFERUSAGE', 'type':'Packet Buffer Usage', 'gain':10, 'units':'count/%' },
-'VKI': { 'component':'SYSTEMTEMPERATURE', 'type':'System Temperature', 'gain':1, 'units':'count/degC'  }
+'VKI': { 'component':'SYSTEMTEMPERATURE', 'type':'System Temperature', 'gain':1, 'units':'count/degC'  },
+'VTW': { 'component':'STATUSBYTE', 'type':'Status Byte', 'gain':0 , 'units':'' },
 }
